@@ -13,6 +13,8 @@ const RecipeCard = (props) => {
         <div id={"collapse" + props.index} className="collapse" role="tabpanel" aria-labelledby={"heading" + props.index} data-parent="#accordion">
           <div className="card-body">
             {props.ingredients}
+            <button type="button" className="btn btn-danger" onClick={props.func}>Delete</button>
+            <button type="button" className="btn btn-secondary">Edit</button>
           </div>
         </div>
       </div>
@@ -27,7 +29,7 @@ class RecipeBox extends React.Component {
       recipes: [
         {
           name: "good",
-          ingredients: "yummystuff"
+          ingredients: "yummy stuff"
         }, {
           name: "bad",
           ingredients: "gross stuff"
@@ -35,31 +37,69 @@ class RecipeBox extends React.Component {
           name: "basic",
           ingredients: "bread and water"
         }
-      ]
+      ],
+      inputRecipeName: "",
+      inputRecipeIngredients: ""
     };
-    this.test = this.test.bind(this);
+    this.addRecipe = this.addRecipe.bind(this);
+    this.handleRecipeName = this.handleRecipeName.bind(this);
+    this.handleRecipeIngredients = this.handleRecipeIngredients.bind(this);
   };
 
-  test() {
+  addRecipe() {
     var abc = this.state.recipes;
-    abc.push({name: "basic", ingredients: "bread and water"})
-    this.setState({abc: abc});
+    abc.push({name: this.state.inputRecipeName, ingredients: this.state.inputRecipeIngredients})
+    this.setState({recipes: abc});
+    this.setState({inputRecipeName: ""});
+    this.setState({inputRecipeIngredients: ""});
   };
+
+  handleRecipeName(event) {
+    this.setState({inputRecipeName: event.target.value});
+  }
+
+  handleRecipeIngredients(event) {
+    this.setState({inputRecipeIngredients: event.target.value})
+  }
+
+  removeRecipe(number) {
+    var temp = this.state.recipes;
+    temp.splice(number, 1);
+    this.setState({recipes: temp});
+  }
 
   render() {
     return (
       <div>
         <div className="container">
           <div className="jumbotron">
-            <button onClick={this.test}>test</button>
             <div id="accordion" role="tablist">
-              {
-                this.state.recipes.map((recipes, index) => (
-                  <RecipeCard name={recipes.name} ingredients={recipes.ingredients} index={index}/>
-                ))
-              }
+              {this.state.recipes.map((recipes, index) => (<RecipeCard name={recipes.name} ingredients={recipes.ingredients} index={index} func={this.removeRecipe.bind(this, index)}/>))
+}
+            </div>
+
+            <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Add a Recipe</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <input value={this.state.inputRecipeName} onChange={this.handleRecipeName}/>
+                    <input value={this.state.inputRecipeIngredients} onChange={this.handleRecipeIngredients}/>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.addRecipe}>Add Recipe</button>
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+          <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Recipe</button>
         </div>
       </div>
     );

@@ -34,7 +34,17 @@ var RecipeCard = function RecipeCard(props) {
         React.createElement(
           "div",
           { className: "card-body" },
-          props.ingredients
+          props.ingredients,
+          React.createElement(
+            "button",
+            { type: "button", className: "btn btn-danger", onClick: props.func },
+            "Delete"
+          ),
+          React.createElement(
+            "button",
+            { type: "button", className: "btn btn-secondary" },
+            "Edit"
+          )
         )
       )
     )
@@ -52,29 +62,54 @@ var RecipeBox = function (_React$Component) {
     _this.state = {
       recipes: [{
         name: "good",
-        ingredients: "yummystuff"
+        ingredients: "yummy stuff"
       }, {
         name: "bad",
         ingredients: "gross stuff"
       }, {
         name: "basic",
         ingredients: "bread and water"
-      }]
+      }],
+      inputRecipeName: "",
+      inputRecipeIngredients: ""
     };
-    _this.test = _this.test.bind(_this);
+    _this.addRecipe = _this.addRecipe.bind(_this);
+    _this.handleRecipeName = _this.handleRecipeName.bind(_this);
+    _this.handleRecipeIngredients = _this.handleRecipeIngredients.bind(_this);
     return _this;
   }
 
   _createClass(RecipeBox, [{
-    key: "test",
-    value: function test() {
+    key: "addRecipe",
+    value: function addRecipe() {
       var abc = this.state.recipes;
-      abc.push({ name: "basic", ingredients: "bread and water" });
-      this.setState({ abc: abc });
+      abc.push({ name: this.state.inputRecipeName, ingredients: this.state.inputRecipeIngredients });
+      this.setState({ recipes: abc });
+      this.setState({ inputRecipeName: "" });
+      this.setState({ inputRecipeIngredients: "" });
+    }
+  }, {
+    key: "handleRecipeName",
+    value: function handleRecipeName(event) {
+      this.setState({ inputRecipeName: event.target.value });
+    }
+  }, {
+    key: "handleRecipeIngredients",
+    value: function handleRecipeIngredients(event) {
+      this.setState({ inputRecipeIngredients: event.target.value });
+    }
+  }, {
+    key: "removeRecipe",
+    value: function removeRecipe(number) {
+      var temp = this.state.recipes;
+      temp.splice(number, 1);
+      this.setState({ recipes: temp });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return React.createElement(
         "div",
         null,
@@ -85,17 +120,67 @@ var RecipeBox = function (_React$Component) {
             "div",
             { className: "jumbotron" },
             React.createElement(
-              "button",
-              { onClick: this.test },
-              "test"
-            ),
-            React.createElement(
               "div",
               { id: "accordion", role: "tablist" },
               this.state.recipes.map(function (recipes, index) {
-                return React.createElement(RecipeCard, { name: recipes.name, ingredients: recipes.ingredients, index: index });
+                return React.createElement(RecipeCard, { name: recipes.name, ingredients: recipes.ingredients, index: index, func: _this2.removeRecipe.bind(_this2, index) });
               })
+            ),
+            React.createElement(
+              "div",
+              { className: "modal fade", id: "exampleModal", tabindex: "-1", role: "dialog", "aria-labelledby": "exampleModalLabel", "aria-hidden": "true" },
+              React.createElement(
+                "div",
+                { className: "modal-dialog", role: "document" },
+                React.createElement(
+                  "div",
+                  { className: "modal-content" },
+                  React.createElement(
+                    "div",
+                    { className: "modal-header" },
+                    React.createElement(
+                      "h5",
+                      { className: "modal-title", id: "exampleModalLabel" },
+                      "Add a Recipe"
+                    ),
+                    React.createElement(
+                      "button",
+                      { type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
+                      React.createElement(
+                        "span",
+                        { "aria-hidden": "true" },
+                        "\xD7"
+                      )
+                    )
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "modal-body" },
+                    React.createElement("input", { value: this.state.inputRecipeName, onChange: this.handleRecipeName }),
+                    React.createElement("input", { value: this.state.inputRecipeIngredients, onChange: this.handleRecipeIngredients })
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "modal-footer" },
+                    React.createElement(
+                      "button",
+                      { type: "button", className: "btn btn-primary", "data-dismiss": "modal", onClick: this.addRecipe },
+                      "Add Recipe"
+                    ),
+                    React.createElement(
+                      "button",
+                      { type: "button", className: "btn btn-secondary", "data-dismiss": "modal" },
+                      "Cancel"
+                    )
+                  )
+                )
+              )
             )
+          ),
+          React.createElement(
+            "button",
+            { type: "button", className: "btn btn-primary", "data-toggle": "modal", "data-target": "#exampleModal" },
+            "Add Recipe"
           )
         )
       );
