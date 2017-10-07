@@ -42,8 +42,58 @@ var RecipeCard = function RecipeCard(props) {
           ),
           React.createElement(
             "button",
-            { type: "button", className: "btn btn-secondary" },
+            { type: "button", className: "btn btn-secondary", "data-toggle": "modal", "data-target": "#modal" + props.index, onClick: props.func4 },
             "Edit"
+          )
+        )
+      )
+    ),
+    React.createElement(
+      "div",
+      { className: "modal fade", id: "modal" + props.index, tabindex: "-1", role: "dialog", "aria-labelledby": "modalLabel" + props.index, "aria-hidden": "true" },
+      React.createElement(
+        "div",
+        { className: "modal-dialog", role: "document" },
+        React.createElement(
+          "div",
+          { className: "modal-content" },
+          React.createElement(
+            "div",
+            { className: "modal-header" },
+            React.createElement(
+              "h5",
+              { className: "modal-title", id: "modalLabel" + props.index },
+              "Edit Recipe"
+            ),
+            React.createElement(
+              "button",
+              { type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
+              React.createElement(
+                "span",
+                { "aria-hidden": "true" },
+                "\xD7"
+              )
+            )
+          ),
+          React.createElement(
+            "div",
+            { className: "modal-body" },
+            React.createElement("input", { value: props.editName, onChange: props.func1 }),
+            React.createElement("input", { value: props.editIngredients, onChange: props.func3 })
+          ),
+          React.createElement(
+            "div",
+            { className: "modal-footer" },
+            React.createElement(
+              "button",
+              { type: "button", className: "btn btn-primary", "data-dismiss": "modal", onClick: props.func2 },
+              "Edit Recipe"
+            ),
+            React.createElement(
+              "button",
+              { type: "button", className: "btn btn-secondary", "data-dismiss": "modal" },
+              "Cancel"
+            )
           )
         )
       )
@@ -71,11 +121,17 @@ var RecipeBox = function (_React$Component) {
         ingredients: "bread and water"
       }],
       inputRecipeName: "",
-      inputRecipeIngredients: ""
+      inputRecipeIngredients: "",
+      editRecipeName: "",
+      editRecipeIngredients: ""
     };
     _this.addRecipe = _this.addRecipe.bind(_this);
     _this.handleRecipeName = _this.handleRecipeName.bind(_this);
     _this.handleRecipeIngredients = _this.handleRecipeIngredients.bind(_this);
+    _this.setInitialState = _this.setInitialState.bind(_this);
+    _this.handleRecipeNameEdit = _this.handleRecipeNameEdit.bind(_this);
+    _this.handleRecipeIngredientsEdit = _this.handleRecipeIngredientsEdit.bind(_this);
+    _this.editRecipe = _this.editRecipe.bind(_this);
     return _this;
   }
 
@@ -106,6 +162,32 @@ var RecipeBox = function (_React$Component) {
       this.setState({ recipes: temp });
     }
   }, {
+    key: "setInitialState",
+    value: function setInitialState(num) {
+      this.setState({ editRecipeName: this.state.recipes[num].name });
+      this.setState({ editRecipeIngredients: this.state.recipes[num].ingredients });
+    }
+  }, {
+    key: "handleRecipeNameEdit",
+    value: function handleRecipeNameEdit(event) {
+      this.setState({ editRecipeName: event.target.value });
+    }
+  }, {
+    key: "handleRecipeIngredientsEdit",
+    value: function handleRecipeIngredientsEdit(event) {
+      this.setState({ editRecipeIngredients: event.target.value });
+    }
+  }, {
+    key: "editRecipe",
+    value: function editRecipe(num) {
+      var def = this.state.recipes;
+      def[num].name = this.state.editRecipeName;
+      def[num].ingredients = this.state.editRecipeIngredients;
+      this.setState({ recipes: def });
+      this.setState({ editRecipeName: "" });
+      this.setState({ editRecipeIngredients: "" });
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -123,7 +205,16 @@ var RecipeBox = function (_React$Component) {
               "div",
               { id: "accordion", role: "tablist" },
               this.state.recipes.map(function (recipes, index) {
-                return React.createElement(RecipeCard, { name: recipes.name, ingredients: recipes.ingredients, index: index, func: _this2.removeRecipe.bind(_this2, index) });
+                return React.createElement(RecipeCard, { name: recipes.name,
+                  ingredients: recipes.ingredients,
+                  index: index,
+                  editName: _this2.state.editRecipeName,
+                  editIngredients: _this2.state.editRecipeIngredients,
+                  func: _this2.removeRecipe.bind(_this2, index),
+                  func1: _this2.handleRecipeNameEdit,
+                  func2: _this2.editRecipe.bind(_this2, index),
+                  func3: _this2.handleRecipeIngredientsEdit,
+                  func4: _this2.setInitialState.bind(_this2, index) });
               })
             ),
             React.createElement(

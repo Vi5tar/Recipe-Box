@@ -14,7 +14,27 @@ const RecipeCard = (props) => {
           <div className="card-body">
             {props.ingredients}
             <button type="button" className="btn btn-danger" onClick={props.func}>Delete</button>
-            <button type="button" className="btn btn-secondary">Edit</button>
+            <button type="button" className="btn btn-secondary" data-toggle="modal" data-target={"#modal" + props.index} onClick={props.func4}>Edit</button>
+          </div>
+        </div>
+      </div>
+      <div className="modal fade" id={"modal" + props.index} tabindex="-1" role="dialog" aria-labelledby={"modalLabel" + props.index} aria-hidden="true">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id={"modalLabel" + props.index}>Edit Recipe</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <input value={props.editName} onChange={props.func1}/>
+              <input value={props.editIngredients} onChange={props.func3}/>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={props.func2}>Edit Recipe</button>
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
@@ -39,11 +59,17 @@ class RecipeBox extends React.Component {
         }
       ],
       inputRecipeName: "",
-      inputRecipeIngredients: ""
+      inputRecipeIngredients: "",
+      editRecipeName: "",
+      editRecipeIngredients: ""
     };
     this.addRecipe = this.addRecipe.bind(this);
     this.handleRecipeName = this.handleRecipeName.bind(this);
     this.handleRecipeIngredients = this.handleRecipeIngredients.bind(this);
+    this.setInitialState = this.setInitialState.bind(this);
+    this.handleRecipeNameEdit = this.handleRecipeNameEdit.bind(this);
+    this.handleRecipeIngredientsEdit = this.handleRecipeIngredientsEdit.bind(this);
+    this.editRecipe = this.editRecipe.bind(this);
   };
 
   addRecipe() {
@@ -68,14 +94,45 @@ class RecipeBox extends React.Component {
     this.setState({recipes: temp});
   }
 
+  setInitialState(num) {
+    this.setState({editRecipeName: this.state.recipes[num].name});
+    this.setState({editRecipeIngredients: this.state.recipes[num].ingredients})
+  }
+
+  handleRecipeNameEdit(event) {
+    this.setState({editRecipeName: event.target.value})
+  }
+
+  handleRecipeIngredientsEdit(event) {
+    this.setState({editRecipeIngredients: event.target.value})
+  }
+
+  editRecipe(num) {
+    var def = this.state.recipes;
+    def[num].name = this.state.editRecipeName;
+    def[num].ingredients = this.state.editRecipeIngredients;
+    this.setState({recipes: def});
+    this.setState({editRecipeName: ""});
+    this.setState({editRecipeIngredients: ""});
+  };
+
   render() {
     return (
       <div>
         <div className="container">
           <div className="jumbotron">
             <div id="accordion" role="tablist">
-              {this.state.recipes.map((recipes, index) => (<RecipeCard name={recipes.name} ingredients={recipes.ingredients} index={index} func={this.removeRecipe.bind(this, index)}/>))
-}
+              {this.state.recipes.map((recipes, index) => (
+                <RecipeCard name={recipes.name}
+                  ingredients={recipes.ingredients}
+                  index={index}
+                  editName={this.state.editRecipeName}
+                  editIngredients={this.state.editRecipeIngredients}
+                  func={this.removeRecipe.bind(this, index)}
+                  func1={this.handleRecipeNameEdit}
+                  func2={this.editRecipe.bind(this, index)}
+                  func3={this.handleRecipeIngredientsEdit}
+                  func4={this.setInitialState.bind(this, index)}/>))}
             </div>
 
             <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
