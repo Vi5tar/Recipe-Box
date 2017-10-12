@@ -70,12 +70,14 @@ class RecipeBox extends React.Component {
     this.handleRecipeNameEdit = this.handleRecipeNameEdit.bind(this);
     this.handleRecipeIngredientsEdit = this.handleRecipeIngredientsEdit.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
+    this.storageUpdate = this.storageUpdate.bind(this);
   };
 
   addRecipe() {
     var abc = this.state.recipes;
     abc.push({name: this.state.inputRecipeName, ingredients: this.state.inputRecipeIngredients})
     this.setState({recipes: abc});
+    this.storageUpdate();
     this.setState({inputRecipeName: ""});
     this.setState({inputRecipeIngredients: ""});
   };
@@ -92,6 +94,7 @@ class RecipeBox extends React.Component {
     var temp = this.state.recipes;
     temp.splice(number, 1);
     this.setState({recipes: temp});
+    this.storageUpdate();
   }
 
   setInitialState(num) {
@@ -112,9 +115,26 @@ class RecipeBox extends React.Component {
     def[num].name = this.state.editRecipeName;
     def[num].ingredients = this.state.editRecipeIngredients;
     this.setState({recipes: def});
+    this.storageUpdate();
     this.setState({editRecipeName: ""});
     this.setState({editRecipeIngredients: ""});
   };
+
+  storageUpdate() {
+    localStorage.setItem("recipeStorage", JSON.stringify(this.state.recipes));
+  }
+
+  componentDidMount() {
+    if (typeof(Storage) !== "undefined") {
+      this.storageUpdate();
+    }
+  }
+
+  componentWillMount() {
+    if (localStorage.recipeStorage) {
+      this.setState({recipes: JSON.parse(localStorage.getItem("recipeStorage"))})
+    }
+  }
 
   render() {
     return (
@@ -122,17 +142,7 @@ class RecipeBox extends React.Component {
         <div className="container">
           <div className="jumbotron">
             <div id="accordion" role="tablist">
-              {this.state.recipes.map((recipes, index) => (
-                <RecipeCard name={recipes.name}
-                  ingredients={recipes.ingredients}
-                  index={index}
-                  editName={this.state.editRecipeName}
-                  editIngredients={this.state.editRecipeIngredients}
-                  func={this.removeRecipe.bind(this, index)}
-                  func1={this.handleRecipeNameEdit}
-                  func2={this.editRecipe.bind(this, index)}
-                  func3={this.handleRecipeIngredientsEdit}
-                  func4={this.setInitialState.bind(this, index)}/>))}
+              {this.state.recipes.map((recipes, index) => (<RecipeCard name={recipes.name} ingredients={recipes.ingredients} index={index} editName={this.state.editRecipeName} editIngredients={this.state.editRecipeIngredients} func={this.removeRecipe.bind(this, index)} func1={this.handleRecipeNameEdit} func2={this.editRecipe.bind(this, index)} func3={this.handleRecipeIngredientsEdit} func4={this.setInitialState.bind(this, index)}/>))}
             </div>
 
             <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
