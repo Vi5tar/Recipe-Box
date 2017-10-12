@@ -132,6 +132,7 @@ var RecipeBox = function (_React$Component) {
     _this.handleRecipeNameEdit = _this.handleRecipeNameEdit.bind(_this);
     _this.handleRecipeIngredientsEdit = _this.handleRecipeIngredientsEdit.bind(_this);
     _this.editRecipe = _this.editRecipe.bind(_this);
+    _this.storageUpdate = _this.storageUpdate.bind(_this);
     return _this;
   }
 
@@ -141,6 +142,7 @@ var RecipeBox = function (_React$Component) {
       var abc = this.state.recipes;
       abc.push({ name: this.state.inputRecipeName, ingredients: this.state.inputRecipeIngredients });
       this.setState({ recipes: abc });
+      this.storageUpdate();
       this.setState({ inputRecipeName: "" });
       this.setState({ inputRecipeIngredients: "" });
     }
@@ -160,6 +162,7 @@ var RecipeBox = function (_React$Component) {
       var temp = this.state.recipes;
       temp.splice(number, 1);
       this.setState({ recipes: temp });
+      this.storageUpdate();
     }
   }, {
     key: "setInitialState",
@@ -184,8 +187,28 @@ var RecipeBox = function (_React$Component) {
       def[num].name = this.state.editRecipeName;
       def[num].ingredients = this.state.editRecipeIngredients;
       this.setState({ recipes: def });
+      this.storageUpdate();
       this.setState({ editRecipeName: "" });
       this.setState({ editRecipeIngredients: "" });
+    }
+  }, {
+    key: "storageUpdate",
+    value: function storageUpdate() {
+      localStorage.setItem("recipeStorage", JSON.stringify(this.state.recipes));
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      if (typeof Storage !== "undefined") {
+        this.storageUpdate();
+      }
+    }
+  }, {
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      if (localStorage.recipeStorage) {
+        this.setState({ recipes: JSON.parse(localStorage.getItem("recipeStorage")) });
+      }
     }
   }, {
     key: "render",
@@ -205,16 +228,7 @@ var RecipeBox = function (_React$Component) {
               "div",
               { id: "accordion", role: "tablist" },
               this.state.recipes.map(function (recipes, index) {
-                return React.createElement(RecipeCard, { name: recipes.name,
-                  ingredients: recipes.ingredients,
-                  index: index,
-                  editName: _this2.state.editRecipeName,
-                  editIngredients: _this2.state.editRecipeIngredients,
-                  func: _this2.removeRecipe.bind(_this2, index),
-                  func1: _this2.handleRecipeNameEdit,
-                  func2: _this2.editRecipe.bind(_this2, index),
-                  func3: _this2.handleRecipeIngredientsEdit,
-                  func4: _this2.setInitialState.bind(_this2, index) });
+                return React.createElement(RecipeCard, { name: recipes.name, ingredients: recipes.ingredients, index: index, editName: _this2.state.editRecipeName, editIngredients: _this2.state.editRecipeIngredients, func: _this2.removeRecipe.bind(_this2, index), func1: _this2.handleRecipeNameEdit, func2: _this2.editRecipe.bind(_this2, index), func3: _this2.handleRecipeIngredientsEdit, func4: _this2.setInitialState.bind(_this2, index) });
               })
             ),
             React.createElement(
