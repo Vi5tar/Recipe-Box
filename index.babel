@@ -102,7 +102,9 @@ class RecipeBox extends React.Component {
         tempObj.ingredients[counter] = tempIng.join("");
         counter++;
         tempIng = [];
-        i++;
+        if (i + 1 == " "){
+          i++;
+        }
       } else {
         tempIng.push(this.state.inputRecipeIngredients.charAt(i));
       }
@@ -156,7 +158,9 @@ class RecipeBox extends React.Component {
         tempObj.ingredients[counter] = tempIng.join("");
         counter++;
         tempIng = [];
-        i++;
+        if (i + 1 == " "){
+          i++;
+        }
       } else {
         tempIng.push(this.state.editRecipeIngredients.charAt(i));
       }
