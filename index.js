@@ -193,7 +193,9 @@ var RecipeBox = function (_React$Component2) {
           tempObj.ingredients[counter] = tempIng.join("");
           counter++;
           tempIng = [];
-          i++;
+          if (i + 1 == " ") {
+            i++;
+          }
         } else {
           tempIng.push(this.state.inputRecipeIngredients.charAt(i));
         }
@@ -254,7 +256,9 @@ var RecipeBox = function (_React$Component2) {
           tempObj.ingredients[counter] = tempIng.join("");
           counter++;
           tempIng = [];
-          i++;
+          if (i + 1 == " ") {
+            i++;
+          }
         } else {
           tempIng.push(this.state.editRecipeIngredients.charAt(i));
         }
