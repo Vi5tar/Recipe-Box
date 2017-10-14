@@ -1,49 +1,61 @@
-const RecipeCard = (props) => {
-  return (
-    <div className="card">
-      <div className="card-header" role="tab" id={"heading" + props.index}>
-        <h5 className="mb-0">
-          <a data-toggle="collapse" data-parent="#accordion" href={"#collapse" + props.index} aria-expanded="false" aria-controls={"collapse" + props.index}>
-            {props.name}
-          </a>
-        </h5>
-      </div>
-
-      <div id={"collapse" + props.index} className="collapse" role="tabpanel" aria-labelledby={"heading" + props.index}>
-        <div className="card-body">
-          <ul className="list-group">
-            <li className="list-group-item">
-              {props.ingredients}
-            </li>
-          </ul>
-          <button type="button" className="btn btn-danger" onClick={props.func}>Delete</button>
-          <button type="button" className="btn btn-secondary" data-toggle="modal" data-target={"#modal" + props.index} onClick={props.func4}>Edit</button>
+class RecipeCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.createItems = this.createItems.bind(this);
+  }
+  createItems(items) {
+    var output = [];
+    for (var i = 0; i < items.length; i++)
+      output.push(
+        <li className="list-group-item">{items[i]}</li>
+      );
+    return output;
+  }
+  render() {
+    return (
+      <div className="card">
+        <div className="card-header" role="tab" id={"heading" + this.props.index}>
+          <h5 className="mb-0">
+            <a data-toggle="collapse" data-parent="#accordion" href={"#collapse" + this.props.index} aria-expanded="false" aria-controls={"collapse" + this.props.index}>
+              {this.props.name}
+            </a>
+          </h5>
         </div>
-      </div>
-      <div className="modal fade" id={"modal" + props.index} tabindex="-1" role="dialog" aria-labelledby={"modalLabel" + props.index} aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id={"modalLabel" + props.index}>Edit Recipe</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>Recipe:</p>
-              <input type="text" className="form-control" value={props.editName} onChange={props.func1}/>
-              <p>Ingredients:</p>
-              <textarea type="text" className="form-control" value={props.editIngredients} onChange={props.func3}/>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={props.func2}>Edit Recipe</button>
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+        <div id={"collapse" + this.props.index} className="collapse" role="tabpanel" aria-labelledby={"heading" + this.props.index}>
+          <div className="card-body">
+            <ul className="list-group">
+              {this.createItems(this.props.ingredients)}
+            </ul>
+            <button type="button" className="btn btn-danger" onClick={this.props.func}>Delete</button>
+            <button type="button" className="btn btn-secondary" data-toggle="modal" data-target={"#modal" + this.props.index} onClick={this.props.func4}>Edit</button>
+          </div>
+        </div>
+        <div className="modal fade" id={"modal" + this.props.index} tabindex="-1" role="dialog" aria-labelledby={"modalLabel" + this.props.index} aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id={"modalLabel" + this.props.index}>Edit Recipe</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>Recipe:</p>
+                <input type="text" className="form-control" value={this.props.editName} onChange={this.props.func1}/>
+                <p>Ingredients:</p>
+                <textarea type="text" className="form-control" value={this.props.editIngredients} onChange={this.props.func3}/>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.props.func2}>Edit Recipe</button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 class RecipeBox extends React.Component {
@@ -53,13 +65,13 @@ class RecipeBox extends React.Component {
       recipes: [
         {
           name: "Good",
-          ingredients: "Yummy Stuff"
+          ingredients: ["Yummy Stuff"]
         }, {
           name: "Bad",
-          ingredients: "Gross Stuff"
+          ingredients: ["Gross Stuff"]
         }, {
           name: "Basic",
-          ingredients: "Bread and Water"
+          ingredients: ["Bread","Water"]
         }
       ],
       inputRecipeName: "",
@@ -81,11 +93,13 @@ class RecipeBox extends React.Component {
     var abc = this.state.recipes;
     var tempIng = [];
     var counter = 0;
-    var tempObj = {name: this.state.inputRecipeName, ingredients: []};
+    var tempObj = {
+      name: this.state.inputRecipeName,
+      ingredients: []
+    };
     for (var i = 0; i < this.state.inputRecipeIngredients.length; i++) {
       if (this.state.inputRecipeIngredients.charAt(i) == ",") {
         tempObj.ingredients[counter] = tempIng.join("");
-        console.log(tempObj.ingredients);
         counter++;
         tempIng = [];
         i++;
@@ -94,7 +108,6 @@ class RecipeBox extends React.Component {
       }
     }
     tempObj.ingredients[counter] = tempIng.join("");
-    console.log(tempObj.ingredients);
     abc.push(tempObj);
     this.setState({recipes: abc});
     this.storageUpdate();
@@ -132,8 +145,25 @@ class RecipeBox extends React.Component {
 
   editRecipe(num) {
     var def = this.state.recipes;
-    def[num].name = this.state.editRecipeName;
-    def[num].ingredients = this.state.editRecipeIngredients;
+    var tempIng = [];
+    var counter = 0;
+    var tempObj = {
+      name: this.state.editRecipeName,
+      ingredients: []
+    };
+    for (var i = 0; i < this.state.editRecipeIngredients.length; i++) {
+      if (this.state.editRecipeIngredients.charAt(i) == ",") {
+        tempObj.ingredients[counter] = tempIng.join("");
+        counter++;
+        tempIng = [];
+        i++;
+      } else {
+        tempIng.push(this.state.editRecipeIngredients.charAt(i));
+      }
+    }
+    tempObj.ingredients[counter] = tempIng.join("");
+    def[num].name = tempObj.name;
+    def[num].ingredients = tempObj.ingredients;
     this.setState({recipes: def});
     this.storageUpdate();
     this.setState({editRecipeName: ""});
@@ -180,7 +210,7 @@ class RecipeBox extends React.Component {
                     <p>Recipe:</p>
                     <input type="text" className="form-control" placeholder="Recipe Name" value={this.state.inputRecipeName} onChange={this.handleRecipeName}/>
                     <p>Ingredients:</p>
-                    <textarea type="text" className="form-control" placeholder="Recipe's Ingredients" value={this.state.inputRecipeIngredients} onChange={this.handleRecipeIngredients}/>
+                    <textarea type="text" className="form-control" placeholder="Recipe Ingredients Seperated by a Comma" value={this.state.inputRecipeIngredients} onChange={this.handleRecipeIngredients}/>
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.addRecipe}>Add Recipe</button>

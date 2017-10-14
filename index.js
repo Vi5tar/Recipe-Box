@@ -8,146 +8,174 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var RecipeCard = function RecipeCard(props) {
-  return React.createElement(
-    "div",
-    { className: "card" },
-    React.createElement(
-      "div",
-      { className: "card-header", role: "tab", id: "heading" + props.index },
-      React.createElement(
-        "h5",
-        { className: "mb-0" },
-        React.createElement(
-          "a",
-          { "data-toggle": "collapse", "data-parent": "#accordion", href: "#collapse" + props.index, "aria-expanded": "false", "aria-controls": "collapse" + props.index },
-          props.name
-        )
-      )
-    ),
-    React.createElement(
-      "div",
-      { id: "collapse" + props.index, className: "collapse", role: "tabpanel", "aria-labelledby": "heading" + props.index },
-      React.createElement(
+var RecipeCard = function (_React$Component) {
+  _inherits(RecipeCard, _React$Component);
+
+  function RecipeCard(props) {
+    _classCallCheck(this, RecipeCard);
+
+    var _this = _possibleConstructorReturn(this, (RecipeCard.__proto__ || Object.getPrototypeOf(RecipeCard)).call(this, props));
+
+    _this.createItems = _this.createItems.bind(_this);
+    return _this;
+  }
+
+  _createClass(RecipeCard, [{
+    key: "createItems",
+    value: function createItems(items) {
+      var output = [];
+      for (var i = 0; i < items.length; i++) {
+        output.push(React.createElement(
+          "li",
+          { className: "list-group-item" },
+          items[i]
+        ));
+      }return output;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return React.createElement(
         "div",
-        { className: "card-body" },
-        React.createElement(
-          "ul",
-          { className: "list-group" },
-          React.createElement(
-            "li",
-            { className: "list-group-item" },
-            props.ingredients
-          )
-        ),
-        React.createElement(
-          "button",
-          { type: "button", className: "btn btn-danger", onClick: props.func },
-          "Delete"
-        ),
-        React.createElement(
-          "button",
-          { type: "button", className: "btn btn-secondary", "data-toggle": "modal", "data-target": "#modal" + props.index, onClick: props.func4 },
-          "Edit"
-        )
-      )
-    ),
-    React.createElement(
-      "div",
-      { className: "modal fade", id: "modal" + props.index, tabindex: "-1", role: "dialog", "aria-labelledby": "modalLabel" + props.index, "aria-hidden": "true" },
-      React.createElement(
-        "div",
-        { className: "modal-dialog", role: "document" },
+        { className: "card" },
         React.createElement(
           "div",
-          { className: "modal-content" },
+          { className: "card-header", role: "tab", id: "heading" + this.props.index },
           React.createElement(
-            "div",
-            { className: "modal-header" },
+            "h5",
+            { className: "mb-0" },
             React.createElement(
-              "h5",
-              { className: "modal-title", id: "modalLabel" + props.index },
-              "Edit Recipe"
-            ),
-            React.createElement(
-              "button",
-              { type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
-              React.createElement(
-                "span",
-                { "aria-hidden": "true" },
-                "\xD7"
-              )
+              "a",
+              { "data-toggle": "collapse", "data-parent": "#accordion", href: "#collapse" + this.props.index, "aria-expanded": "false", "aria-controls": "collapse" + this.props.index },
+              this.props.name
             )
-          ),
+          )
+        ),
+        React.createElement(
+          "div",
+          { id: "collapse" + this.props.index, className: "collapse", role: "tabpanel", "aria-labelledby": "heading" + this.props.index },
           React.createElement(
             "div",
-            { className: "modal-body" },
+            { className: "card-body" },
             React.createElement(
-              "p",
-              null,
-              "Recipe:"
-            ),
-            React.createElement("input", { type: "text", className: "form-control", value: props.editName, onChange: props.func1 }),
-            React.createElement(
-              "p",
-              null,
-              "Ingredients:"
-            ),
-            React.createElement("textarea", { type: "text", className: "form-control", value: props.editIngredients, onChange: props.func3 })
-          ),
-          React.createElement(
-            "div",
-            { className: "modal-footer" },
-            React.createElement(
-              "button",
-              { type: "button", className: "btn btn-primary", "data-dismiss": "modal", onClick: props.func2 },
-              "Edit Recipe"
+              "ul",
+              { className: "list-group" },
+              this.createItems(this.props.ingredients)
             ),
             React.createElement(
               "button",
-              { type: "button", className: "btn btn-secondary", "data-dismiss": "modal" },
-              "Cancel"
+              { type: "button", className: "btn btn-danger", onClick: this.props.func },
+              "Delete"
+            ),
+            React.createElement(
+              "button",
+              { type: "button", className: "btn btn-secondary", "data-toggle": "modal", "data-target": "#modal" + this.props.index, onClick: this.props.func4 },
+              "Edit"
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "modal fade", id: "modal" + this.props.index, tabindex: "-1", role: "dialog", "aria-labelledby": "modalLabel" + this.props.index, "aria-hidden": "true" },
+          React.createElement(
+            "div",
+            { className: "modal-dialog", role: "document" },
+            React.createElement(
+              "div",
+              { className: "modal-content" },
+              React.createElement(
+                "div",
+                { className: "modal-header" },
+                React.createElement(
+                  "h5",
+                  { className: "modal-title", id: "modalLabel" + this.props.index },
+                  "Edit Recipe"
+                ),
+                React.createElement(
+                  "button",
+                  { type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
+                  React.createElement(
+                    "span",
+                    { "aria-hidden": "true" },
+                    "\xD7"
+                  )
+                )
+              ),
+              React.createElement(
+                "div",
+                { className: "modal-body" },
+                React.createElement(
+                  "p",
+                  null,
+                  "Recipe:"
+                ),
+                React.createElement("input", { type: "text", className: "form-control", value: this.props.editName, onChange: this.props.func1 }),
+                React.createElement(
+                  "p",
+                  null,
+                  "Ingredients:"
+                ),
+                React.createElement("textarea", { type: "text", className: "form-control", value: this.props.editIngredients, onChange: this.props.func3 })
+              ),
+              React.createElement(
+                "div",
+                { className: "modal-footer" },
+                React.createElement(
+                  "button",
+                  { type: "button", className: "btn btn-primary", "data-dismiss": "modal", onClick: this.props.func2 },
+                  "Edit Recipe"
+                ),
+                React.createElement(
+                  "button",
+                  { type: "button", className: "btn btn-secondary", "data-dismiss": "modal" },
+                  "Cancel"
+                )
+              )
             )
           )
         )
-      )
-    )
-  );
-};
+      );
+    }
+  }]);
 
-var RecipeBox = function (_React$Component) {
-  _inherits(RecipeBox, _React$Component);
+  return RecipeCard;
+}(React.Component);
+
+;
+
+var RecipeBox = function (_React$Component2) {
+  _inherits(RecipeBox, _React$Component2);
 
   function RecipeBox(props) {
     _classCallCheck(this, RecipeBox);
 
-    var _this = _possibleConstructorReturn(this, (RecipeBox.__proto__ || Object.getPrototypeOf(RecipeBox)).call(this, props));
+    var _this2 = _possibleConstructorReturn(this, (RecipeBox.__proto__ || Object.getPrototypeOf(RecipeBox)).call(this, props));
 
-    _this.state = {
+    _this2.state = {
       recipes: [{
         name: "Good",
-        ingredients: "Yummy Stuff"
+        ingredients: ["Yummy Stuff"]
       }, {
         name: "Bad",
-        ingredients: "Gross Stuff"
+        ingredients: ["Gross Stuff"]
       }, {
         name: "Basic",
-        ingredients: "Bread and Water"
+        ingredients: ["Bread", "Water"]
       }],
       inputRecipeName: "",
       inputRecipeIngredients: "",
       editRecipeName: "",
       editRecipeIngredients: ""
     };
-    _this.addRecipe = _this.addRecipe.bind(_this);
-    _this.handleRecipeName = _this.handleRecipeName.bind(_this);
-    _this.handleRecipeIngredients = _this.handleRecipeIngredients.bind(_this);
-    _this.setInitialState = _this.setInitialState.bind(_this);
-    _this.handleRecipeNameEdit = _this.handleRecipeNameEdit.bind(_this);
-    _this.handleRecipeIngredientsEdit = _this.handleRecipeIngredientsEdit.bind(_this);
-    _this.editRecipe = _this.editRecipe.bind(_this);
-    _this.storageUpdate = _this.storageUpdate.bind(_this);
-    return _this;
+    _this2.addRecipe = _this2.addRecipe.bind(_this2);
+    _this2.handleRecipeName = _this2.handleRecipeName.bind(_this2);
+    _this2.handleRecipeIngredients = _this2.handleRecipeIngredients.bind(_this2);
+    _this2.setInitialState = _this2.setInitialState.bind(_this2);
+    _this2.handleRecipeNameEdit = _this2.handleRecipeNameEdit.bind(_this2);
+    _this2.handleRecipeIngredientsEdit = _this2.handleRecipeIngredientsEdit.bind(_this2);
+    _this2.editRecipe = _this2.editRecipe.bind(_this2);
+    _this2.storageUpdate = _this2.storageUpdate.bind(_this2);
+    return _this2;
   }
 
   _createClass(RecipeBox, [{
@@ -156,11 +184,13 @@ var RecipeBox = function (_React$Component) {
       var abc = this.state.recipes;
       var tempIng = [];
       var counter = 0;
-      var tempObj = { name: this.state.inputRecipeName, ingredients: [] };
+      var tempObj = {
+        name: this.state.inputRecipeName,
+        ingredients: []
+      };
       for (var i = 0; i < this.state.inputRecipeIngredients.length; i++) {
         if (this.state.inputRecipeIngredients.charAt(i) == ",") {
           tempObj.ingredients[counter] = tempIng.join("");
-          console.log(tempObj.ingredients);
           counter++;
           tempIng = [];
           i++;
@@ -169,7 +199,6 @@ var RecipeBox = function (_React$Component) {
         }
       }
       tempObj.ingredients[counter] = tempIng.join("");
-      console.log(tempObj.ingredients);
       abc.push(tempObj);
       this.setState({ recipes: abc });
       this.storageUpdate();
@@ -214,8 +243,25 @@ var RecipeBox = function (_React$Component) {
     key: "editRecipe",
     value: function editRecipe(num) {
       var def = this.state.recipes;
-      def[num].name = this.state.editRecipeName;
-      def[num].ingredients = this.state.editRecipeIngredients;
+      var tempIng = [];
+      var counter = 0;
+      var tempObj = {
+        name: this.state.editRecipeName,
+        ingredients: []
+      };
+      for (var i = 0; i < this.state.editRecipeIngredients.length; i++) {
+        if (this.state.editRecipeIngredients.charAt(i) == ",") {
+          tempObj.ingredients[counter] = tempIng.join("");
+          counter++;
+          tempIng = [];
+          i++;
+        } else {
+          tempIng.push(this.state.editRecipeIngredients.charAt(i));
+        }
+      }
+      tempObj.ingredients[counter] = tempIng.join("");
+      def[num].name = tempObj.name;
+      def[num].ingredients = tempObj.ingredients;
       this.setState({ recipes: def });
       this.storageUpdate();
       this.setState({ editRecipeName: "" });
@@ -245,7 +291,7 @@ var RecipeBox = function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return React.createElement(
         "div",
@@ -260,7 +306,7 @@ var RecipeBox = function (_React$Component) {
               "div",
               { id: "accordion", role: "tablist", "aria-multiselectable": "true" },
               this.state.recipes.map(function (recipes, index) {
-                return React.createElement(RecipeCard, { name: recipes.name, ingredients: recipes.ingredients, index: index, editName: _this2.state.editRecipeName, editIngredients: _this2.state.editRecipeIngredients, func: _this2.removeRecipe.bind(_this2, index), func1: _this2.handleRecipeNameEdit, func2: _this2.editRecipe.bind(_this2, index), func3: _this2.handleRecipeIngredientsEdit, func4: _this2.setInitialState.bind(_this2, index) });
+                return React.createElement(RecipeCard, { name: recipes.name, ingredients: recipes.ingredients, index: index, editName: _this3.state.editRecipeName, editIngredients: _this3.state.editRecipeIngredients, func: _this3.removeRecipe.bind(_this3, index), func1: _this3.handleRecipeNameEdit, func2: _this3.editRecipe.bind(_this3, index), func3: _this3.handleRecipeIngredientsEdit, func4: _this3.setInitialState.bind(_this3, index) });
               })
             ),
             React.createElement(
@@ -304,7 +350,7 @@ var RecipeBox = function (_React$Component) {
                       null,
                       "Ingredients:"
                     ),
-                    React.createElement("textarea", { type: "text", className: "form-control", placeholder: "Recipe's Ingredients", value: this.state.inputRecipeIngredients, onChange: this.handleRecipeIngredients })
+                    React.createElement("textarea", { type: "text", className: "form-control", placeholder: "Recipe Ingredients Seperated by a Comma", value: this.state.inputRecipeIngredients, onChange: this.handleRecipeIngredients })
                   ),
                   React.createElement(
                     "div",
